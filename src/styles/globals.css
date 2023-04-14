@@ -1,4 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
+@font-face {
+    font-family: "Product Sans Regular";
+    src: url(../fonts/Product\ Sans\ Regular.ttf );
+}
+
+@font-face {
+    font-family: "Product Sans Bold";
+    src: url(../fonts/Product\ Sans\ Bold.ttf );
+}
+
+@font-face {
+    font-family: "Product Sans Italic";
+    src: url(../fonts/Product\ Sans\ Italic.ttf);
+}
+
+@font-face {
+    font-family: "Product Sans Bold Italic";
+    src: url(../fonts/Product\ Sans\ Bold\ Italic.ttf);
+}
+
+
+body,html {
+    font-family: Product Sans Regular;
+    overflow-x: hidden !important;
+}
