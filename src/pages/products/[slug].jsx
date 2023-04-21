@@ -1,6 +1,13 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-const Post = () => {
+const Post = ({
+  cart,
+  addToCart,
+  RemoveFromCart,
+  ClearCart,
+  saveCart,
+  subTotal,
+}) => {
   const router = useRouter();
   const { slug } = router.query;
   const [pincode, setPincode] = useState("");
@@ -199,7 +206,7 @@ const Post = () => {
                 <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
                  Buy Now
                 </button>
-                <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                <button onClick={()=>{addToCart(slug,1,499,'wear th fuck','XL','Red')}} className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
                   Add to Cart
                 </button>
                 <button

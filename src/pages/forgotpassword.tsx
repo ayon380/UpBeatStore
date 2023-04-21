@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
-const signup = () => {
+import React from 'react'
+import Link from 'next/link'
+const forgotpassword = () => {
   return (
     <div>
       <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
@@ -25,20 +25,7 @@ const signup = () => {
           <form className="mt-8 space-y-6" action="#" method="POST">
             <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
-            <div>
-                <label htmlFor="name" className="sr-only">
-                Your Name
-                </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="name"
-                  autoComplete="name"
-                  required
-                  className="relative block w-full rounded-t-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  placeholder="Your Name"
-                />
-              </div>
+            
               <div>
                 <label htmlFor="email-address" className="sr-only">
                   Email address
@@ -49,7 +36,8 @@ const signup = () => {
                   type="email"
                   autoComplete="email"
                   required
-                  className="relative block w-full  border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="relative block w-full  border-0 p-1.5 text-gray-900 
+                  rounded-t-md ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   placeholder="Email address"
                 />
               </div>
@@ -81,9 +69,7 @@ const signup = () => {
                   placeholder="Re-enter Password"
                 />
               </div>
-            </div>
-
-           
+            </div> 
             <div>
               <button
                 type="submit"
@@ -110,7 +96,7 @@ const signup = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default signup;
+export default forgotpassword
