@@ -15,6 +15,7 @@ const Navbar = ({
   RemoveFromCart,
   ClearCart,
   saveCart,
+  increasecart,
   subTotal,
 }) => {
   const inputRef = useRef(null);
@@ -39,9 +40,11 @@ const Navbar = ({
   return (
     <div>
       <div className="flex flex-col md:flex-row md:justify-start justify-center items-center p-2 z-10 fixed top-0 shadow-md w-full bg-white ">
-        <div className="top-1 logo mx-5 font-extrabold text-2xl">
-          UpBeatStore
-        </div>
+        <Link href="/">
+          <div className="top-1 logo mx-5 font-extrabold text-2xl">
+            UpBeatStore
+          </div>
+        </Link>
         <div className="nav">
           <ul className="flex items-center space-x-4 font-bold top-4">
             <Link href="/tshirts">
@@ -87,11 +90,11 @@ text-2x1 text-pink-500"
               return (
                 <li key={item}>
                   <div className="item flex my-5">
-                    <div className="w-2/3 font-semibold">{cart[item].name}</div>
+                    <div className="w-2/3 font-semibold">{cart[item].name+"("+cart[item].variant+","+cart[item].size+")"}</div>
                     <div className="flex font-semibold items-center justify-center w-1/3">
                       <AiOutlinePlus
                         onClick={() => {
-                          addToCart(item, 1, 499, "wear th fuck", "XL", "Red");
+                         return increasecart(item, 1);
                         }}
                         className="mx-3 text-2xl"
                       />

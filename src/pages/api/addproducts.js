@@ -8,13 +8,11 @@ const handler = async (req, res) => {
                     title: req.body[i].title,
                     slug: req.body[i].slug,
                     description: req.body[i].description,
-                    img: req.body[i].img,
                     category: req.body[i].category,
-                    size: req.body[i].size,
-                    color: req.body[i].color,
+                    variant: req.body[i].variant,
                     price: req.body[i].price,
-                    availQ: req.body[i].availQ,
                 });
+                console.log(p);
                 await p.save()
             }
 

@@ -1,9 +1,88 @@
 import Link from "next/link";
 import React from "react";
+import { ToastContainer, toast } from "react-toastify";
 
+import "react-toastify/dist/ReactToastify.css";
 const login = () => {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === "email") {
+      setEmail(value);
+    } else if (name === "password") {
+      setPassword(value);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = {
+      email: email,
+      password: password,
+    };
+    console.log(formData);
+
+    fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(
+            "Logged in Successfully✅ ,Redirecting to Home Page",
+            {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            }
+          );
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
+        }
+        else{
+          toast.error("Invalid Credentials ❌❌", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error("Server Error,Pleas Try Again Later ❌❌", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        console.log(err);
+      });
+    setEmail("");
+    setPassword("");
+   
+  };
   return (
     <div>
+      <ToastContainer />
       <div className="flex min-h-full items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
@@ -19,11 +98,11 @@ const login = () => {
                 href="/signup"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-               Sign Up Now
+                Sign Up Now
               </Link>
             </p>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6" action="#" onSubmit={handleSubmit} method="POST">
             <input type="hidden" name="remember" value="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
@@ -31,9 +110,11 @@ const login = () => {
                   Email address
                 </label>
                 <input
-                  id="email-address"
+                  id="email"
                   name="email"
+                  value={email}
                   type="email"
+                  onChange={handleChange}
                   autoComplete="email"
                   required
                   className="relative block w-full rounded-t-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -48,6 +129,8 @@ const login = () => {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={handleChange}
                   autoComplete="current-password"
                   required
                   className="relative block w-full rounded-b-md border-0 p-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

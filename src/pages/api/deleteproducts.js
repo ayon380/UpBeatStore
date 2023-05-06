@@ -6,17 +6,14 @@ const handler = async (req, res) => {
             for (let i = 0; i < req.body.length; i++) {
                 let p = await Product.findByIdAndDelete(req.body[i]._id, req.body[i], { new: true });
             }
-
             res.status(200).json({ message: "Product Deleted successfully" })
         } catch (err) {
-            res.status(400).json({ message: err.message})
+            res.status(400).json({ message: err.message })
             console.log(err);
         }
-
     }
     else {
         res.status(400).json({ message: "Invalid Request" })
     }
-
 }
 export default connectDB(handler);

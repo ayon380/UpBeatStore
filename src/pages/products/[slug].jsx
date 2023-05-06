@@ -1,53 +1,94 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
 const Post = ({
+  buynow,
   cart,
   addToCart,
   RemoveFromCart,
   ClearCart,
   saveCart,
+
   subTotal,
+  data,
+  title,
+  size,
+  colour,
+  combo,
+  img,
 }) => {
-  const router = useRouter();
-  const { slug } = router.query;
   const [pincode, setPincode] = useState("");
-  const [serviceable, setServiceable] = useState("Enter Pincode to check serviceability !!");
+  const [index, setIndex] = useState(0);
+
+  const [serviceable, setServiceable] = useState(
+    "Enter Pincode to check serviceability !!"
+  );
+  // console.log(data);
   const checkPincode = async () => {
     console.log("checkPincode");
-    const res=await fetch("/api/pincode", {
+    const res = await fetch("/api/pincode", {
       method: "POST",
-      body: JSON.stringify({ "pincode": pincode }),
+      body: JSON.stringify({ pincode: pincode }),
       headers: {
         "Content-Type": "application/json",
       },
     });
-    const data=await res.json();
+    const data = await res.json();
     console.log(data.message);
-    if(data.message==="success"){
+    if (data.message === "success") {
+      toast.success('🦄 Wow so easy!', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
       setServiceable("Yayyy😊😊 We deliver to your area !!");
-    }
-    else{
+    } else {
       setServiceable("Oops😔😔 We don't deliver to your area !!");
     }
   };
- 
+  const q=combo[0].split("-")
+  const [colourr, setColour] = useState(q[0]);
+  const [sizee, setSize] = useState(q[1]);
+  const variantchange = (item) => {
+    setColour(item);
+    for (let i = 0; i < combo.length; i++) {
+      if (combo[i] === colourr + sizee) {
+        for (let j = 0; j < colour.length; j++) {
+          if (colour[j] === colourr) {
+            setIndex(i);
+          }
+        }
+      }
+    }
+    console.log(index);
+  };
+  const sizechange = (e) => {
+    setSize(e.target.value);
+    console.log(sizee);
+    variantchange(colourr);
+  };
+
+  console.log(colour);
   return (
     <div>
-      {slug}
       <section className="text-gray-600 body-font overflow-hidden">
+        <ToastContainer />
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
             <img
               alt="ecommerce"
               className="lg:w-1/2 w-full lg:h-auto px-24 object-cover object-top rounded"
-              src="https://m.media-amazon.com/images/I/41uPz0sTr9L._UY741_.jpg"
+              src={`${img[index]}`}
             />
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
-              <h2 className="text-sm title-font text-gray-500 tracking-widest">
-                BRAND NAME
-              </h2>
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">
-                The Catcher in the Rye
+                {data[title].title}
               </h1>
               <div className="flex mb-4">
                 <span className="flex items-center">
@@ -147,41 +188,58 @@ const Post = ({
                   </a>
                 </span>
               </div>
-              <p className="leading-relaxed">
-                Fam locavore kickstarter distillery. Mixtape chillwave tumeric
-                sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo
-                juiceramps cornhole raw denim forage brooklyn. Everyday carry +1
-                seitan poutine tumeric. Gastropub blue bottle austin listicle
-                pour-over, neutra jean shorts keytar banjo tattooed umami
-                cardigan.
-              </p>
+              <p className="leading-relaxed">{data[title].description}</p>
               <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
                 <div className="flex">
-                  <span className="mr-3">Color</span>
-                  <button
-                    title="jkn"
-                    className="border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none"
-                  ></button>
-                  <button
-                    title="hb"
-                    className="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none"
-                  ></button>
-                  <button
-                    title="j"
-                    className="border-2 border-gray-300 ml-1 bg-indigo-500 rounded-full w-6 h-6 focus:outline-none"
-                  ></button>
+                  {colour.map((item) => {
+                    return combo.includes(colourr+"-"+item) ? (
+                      <button
+                        key={item}
+                        style={{
+                          borderWidth: "2px",
+                          borderColor: "#d1d5db",
+                          borderRadius: "9999px",
+                          width: "1.5rem",
+                          height: "1.5rem",
+                          outline: "solid",
+                          backgroundColor: item,
+                        }}
+                        className="mr-1"
+                        onClick={() => variantchange(item)}
+                      >
+                        {/* {item} */}
+                      </button>
+                    ) : (
+                      <button
+                        key={item}
+                        style={{
+                          borderWidth: "2px",
+                          borderColor: "#d1d5db",
+                          borderRadius: "9999px",
+                          width: "1.5rem",
+                          height: "1.5rem",
+                          outline: "none",
+                          backgroundColor: item,
+                        }}
+                        className="mr-1"
+                        onClick={() => variantchange(item)}
+                      >
+                        {/* {item} */}
+                      </button>
+                    );
+                  })}
                 </div>
                 <div className="flex ml-6 items-center">
                   <span className="mr-3">Size</span>
                   <div className="relative">
                     <select
+                      onChange={sizechange}
                       title="uj"
                       className="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10"
                     >
-                      <option>SM</option>
-                      <option>M</option>
-                      <option>L</option>
-                      <option>XL</option>
+                      {size.map((itemm) => {
+                        return combo.includes(colourr+"-"+itemm) && <option>{itemm}</option>;
+                      })}
                     </select>
                     <span className="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                       <svg
@@ -199,14 +257,39 @@ const Post = ({
                   </div>
                 </div>
               </div>
-              <div className="flex">
-                <span className="title-font font-medium text-2xl text-gray-900">
-                  ₹599.00
-                </span>
-                <button className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
-                 Buy Now
+
+              <span className="title-font font-medium text-4xl text-gray-900 ">
+                ₹{data[title].price}
+              </span>
+              <div className="flex my-6">
+                <button
+                  className="flex text-white bg-indigo-500 border-0 py-2 px-6  focus:outline-none hover:bg-indigo-600 rounded"
+                  onClick={() =>
+                    buynow(
+                      data[title].slug + "-" + sizee + "-" + colourr,
+                      1,
+                      data[title].price,
+                      data[title].title,
+                      size[index],
+                      colour[index]
+                    )
+                  }
+                >
+                  Buy Now
                 </button>
-                <button onClick={()=>{addToCart(slug,1,499,'wear th fuck','XL','Red')}} className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+                <button
+                  onClick={() => {
+                    addToCart(
+                      data[title].slug + "-" + sizee + "-" + colourr,
+                      1,
+                      data[title].price,
+                      data[title].title,
+                      size[index],
+                      colour[index]
+                    );
+                  }}
+                  className="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                >
                   Add to Cart
                 </button>
                 <button
@@ -227,7 +310,7 @@ const Post = ({
               </div>
               <div className="pin mt-6 flex space-x-2 text-sm">
                 <input
-                onChange={(e)=>setPincode(e.target.value)}
+                  onChange={(e) => setPincode(e.target.value)}
                   type="text"
                   className="rounded px-2 border-2 border-indigo-500"
                 />
@@ -238,11 +321,8 @@ const Post = ({
                 >
                   Check
                 </button>
-                
-                </div>
-                <div className="text-black">
-                  {serviceable}
               </div>
+              <div className="text-black my-16">{serviceable}</div>
             </div>
           </div>
         </div>
@@ -250,4 +330,56 @@ const Post = ({
     </div>
   );
 };
+export async function getServerSideProps(context) {
+  const { slug } = context.query;
+  console.log(slug + "slug.js");
+  const res = await fetch(`http://localhost:3000/api/productdetail`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title: slug }),
+  });
+
+  const d = await res.json();
+  const title = slug;
+  const data = d.p;
+  console.log(data);
+  const arr = data[title].variant.split(";");
+  let colour = [];
+  let size = [];
+  let combo = [];
+  const set1 = new Set();
+  let img = [];
+  arr.map((a) => {
+    const b = a.split(",");
+    combo.push(b[0] +"-" +b[1]);
+    if (!set1.has(b[0])) {
+      set1.add(b[0]);
+      colour.push(b[0]);
+    }
+    if (!set1.has(b[1])) {
+      set1.add(b[1]);
+      size.push(b[1]);
+    }
+    if (!set1.has(b[2])) {
+      set1.add(b[2]);
+      img.push(b[2]);
+    }
+  });
+  console.log(colour);
+  console.log(size);
+  console.log(combo);
+  console.log(img);
+  return {
+    props: {
+      data,
+      title,
+      size,
+      colour,
+      combo,
+      img,
+    },
+  };
+}
 export default Post;

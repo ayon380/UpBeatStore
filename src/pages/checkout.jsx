@@ -8,7 +8,14 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import Link from "next/link";
-const checkout = ({ cart, ClearCart, addToCart, RemoveFromCart, subTotal }) => {
+const checkout = ({
+  cart,
+  ClearCart,
+  addToCart,
+  increasecart,
+  RemoveFromCart,
+  subTotal,
+}) => {
   return (
     <div>
       <div className="container m-auto mt-11">
@@ -134,14 +141,19 @@ const checkout = ({ cart, ClearCart, addToCart, RemoveFromCart, subTotal }) => {
             <div className="my-4 semi-bold">Cart is Empty</div>
           )}
           {Object.keys(cart).map((item) => {
+            console.log(cart[item]);
             return (
               <li key={item}>
                 <div className="item flex my-5">
-                  <div className="w-2/3 font-semibold">{cart[item].name}</div>
+                  <div className="w-2/3 font-semibold">
+                    {cart[item].name}
+                    {"("}
+                    {cart[item].size + "," + cart[item].variant + ")"}
+                  </div>
                   <div className="flex font-semibold items-center justify-center w-1/3">
                     <AiOutlinePlus
                       onClick={() => {
-                        addToCart(item, 1, 499, "wear th fuck", "XL", "Red");
+                        return increasecart(item, 1);
                       }}
                       className="mx-3 text-2xl"
                     />
@@ -167,13 +179,13 @@ const checkout = ({ cart, ClearCart, addToCart, RemoveFromCart, subTotal }) => {
         </button>
         <span className="total">Subtotal :{subTotal}</span>
         <Link href={"/order"}>
-              <button
-                type="button"
-                className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-              >
-                Pay ₹{subTotal}
-              </button>
-            </Link>
+          <button
+            type="button"
+            className="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          >
+            Pay ₹{subTotal}
+          </button>
+        </Link>
       </div>
     </div>
   );

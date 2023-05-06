@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-const tshirts = ({ data }) => {
+const hoodies = ({ data }) => {
   console.log(data);
   // const r = "red";
 
@@ -63,7 +63,7 @@ export async function getServerSideProps() {
   const res = await fetch("http://localhost:3000/api/getproduct",
   {
     method: "POST",
-    body: JSON.stringify({ category: "Tshirts" }),
+    body: JSON.stringify({ category: "Hoodies" }),
     headers: {
       "Content-Type": "application/json"
     },
@@ -77,4 +77,4 @@ export async function getServerSideProps() {
     },
   };
 }
-export default tshirts;
+export default hoodies;

@@ -3,10 +3,12 @@ import Navbar from "@/components/Navbar";
 import "@/styles/globals.css";
 import { AppProps } from "next/app";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setSubTotal] = useState(0);
+  const router=useRouter();
   useEffect(() => {
     console.log("ff");
     try {
@@ -31,10 +33,26 @@ export default function App({ Component, pageProps }) {
     }
     setSubTotal(subt);
   };
+  const buynow=(itemCode, qty, price, name, size, variant)=>{
+    let newCart = {[itemCode] : { qty:1, price, name, size, variant }};
+    console.log(price);
+    setCart(newCart);
+    saveCart(newCart);
+    console.log(price);
+    router.push("/checkout")
+  }
   const ClearCart = () => {
     localStorage.removeItem("cart");
     setCart({});
     saveCart({});
+  };
+  const increasecart = (itemCode, qty) => {
+    let myCart = cart;
+    if (itemCode in myCart) {
+      myCart[itemCode].qty = cart[itemCode].qty + qty;
+    }
+    setCart(myCart);
+    saveCart(myCart);
   };
   const RemoveFromCart = (itemCode,qty) => {
     let myCart = cart;
@@ -49,7 +67,7 @@ export default function App({ Component, pageProps }) {
   };
   const addToCart = (itemCode, qty, price, name, size, variant) => {
     let newCart = cart;
-    if (itemCode in cart) {
+    if (itemCode in cart && cart[itemCode].size === size && cart[itemCode].variant === variant) {
       newCart[itemCode].qty = cart[itemCode].qty + qty;
     } else {
       newCart[itemCode] = { qty, price, name, size, variant };
@@ -67,14 +85,17 @@ export default function App({ Component, pageProps }) {
         ClearCart={ClearCart}
         saveCart={saveCart}
         subTotal={subTotal}
+        increasecart={increasecart}
       />{" "}
       <Component
+      buynow={buynow}
         cart={cart}
         addToCart={addToCart}
         RemoveFromCart={RemoveFromCart}
         ClearCart={ClearCart}
         saveCart={saveCart}
         subTotal={subTotal}
+        increasecart={increasecart}
         {...pageProps}
       />
       <Footer />
